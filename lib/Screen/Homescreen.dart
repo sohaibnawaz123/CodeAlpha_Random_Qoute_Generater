@@ -9,9 +9,15 @@ import '../bloc/randomQoute_Event.dart';
 import '../utils/appTheme.dart';
 import '../utils/typography.dart';
 
-class Homescreen extends StatelessWidget {
+class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
 
+  @override
+  State<Homescreen> createState() => _HomescreenState();
+}
+
+class _HomescreenState extends State<Homescreen> {
+  bool show = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,15 +68,17 @@ class Homescreen extends StatelessWidget {
                         Align(
                           alignment: Alignment.bottomRight,
                           child: GestureDetector(
-                            onTap: () async {
-                              await Share.share(state.qoute);
-                            },
-                            child: const Icon(
-                              CupertinoIcons.arrowshape_turn_up_right_fill,
-                              color: Apptheme.white,
-                              size: 32,
-                            ),
-                          ),
+                              onTap: () async {
+                                await Share.share(state.qoute);
+                              },
+                              child: show
+                                  ? const Icon(
+                                      CupertinoIcons
+                                          .arrowshape_turn_up_right_fill,
+                                      color: Apptheme.white,
+                                      size: 32,
+                                    )
+                                  : const SizedBox.shrink()),
                         ),
                       ],
                     ),
@@ -91,6 +99,9 @@ class Homescreen extends StatelessWidget {
                   backgroundColor: Apptheme.primaryColor),
               onPressed: () {
                 context.read<RandomqouteBloc>().add(GenerateQoute());
+                setState(() {
+                  show = true;
+                });
               },
               child: Text(
                 'Generater'.toUpperCase(),
